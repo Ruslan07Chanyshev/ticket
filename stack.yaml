@@ -1,0 +1,24 @@
+version: "3.3"
+volumes:
+  jenkins-volume: {}
+
+services: 
+  jenkins:
+    image: jenkins/jenkins
+    deploy:
+      replicas: 3
+      resources:
+        reservations:
+          cpus: '2'
+          memory: 2048g
+      restart_policy:
+         condition: on-failure
+      placement:
+        constraints: 
+          - "node.role==worker1"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-volume:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
